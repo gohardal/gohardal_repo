@@ -1,19 +1,24 @@
 describe('test Event dashboard/Details section', () => {
 
-  before(() => {
-    //precondition 1: a signed in user
-    cy.visit('/signin');
-    cy.viewport(1680, 1050);
-    cy.fixture('login').then(jsonOb => {
-      cy.typeLoginCredentials(jsonOb.username, jsonOb.password);
-    });
-    cy.wait(5000);
-    cy.url().should('include', '/templates');
+  // before(() => {
+  //   //precondition 1: a signed in user
+  //   cy.viewport(1680, 1050);
+  //   cy.visit('/signin');
+    
 
-    //precondition 2: an RSVP template applied
-    cy.visit('/website-maker/1061643/lang/edit/home');
-    // cy.get('.styled__Button-sc-1da81z7-5').click();
-  });
+  //   cy.fixture('login').then(jsonOb => {
+  //     cy.typeLoginCredentials(jsonOb.username, jsonOb.password);
+  //   });
+
+  //   cy.wait(5000);
+  //   cy.url().should('include', '/templates');
+
+  //   //precondition 2: an RSVP template applied
+  //   cy.visit('/website-maker/1061643/lang/edit/home');
+
+  //   cy.get('button[aria-label="close"]', {timeout: 15000}).should('be.visible').click()
+  //   // cy.get('.styled__Button-sc-1da81z7-5').click();
+  // });
 
   //precondition 3: Event dashboard/Details section opened
   beforeEach(() => {
@@ -22,8 +27,24 @@ describe('test Event dashboard/Details section', () => {
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false
     });
-    //Step 1: Open Event dashboard/Details section
+
     cy.viewport(1680, 1050);
+    cy.visit('/signin');
+    
+
+    cy.fixture('login').then(jsonOb => {
+      cy.typeLoginCredentials(jsonOb.username, jsonOb.password);
+    });
+
+    cy.wait(5000);
+    cy.url().should('include', '/templates');
+
+    //precondition 2: an RSVP template applied
+    cy.visit('/website-maker/1061643/lang/edit/home');
+
+    cy.get('button[aria-label="close"]', {timeout: 15000}).should('be.visible').click()
+
+    //Step 1: Open Event dashboard/Details section
     cy.get('.styled__MainSidebarContainer-sc-1aauc4w-0 > :nth-child(3) > :nth-child(1)').click();
     cy.wait(5000);
     cy.get('ul > :nth-child(1)').click();
@@ -54,18 +75,28 @@ describe('test Event dashboard/Details section', () => {
 
   afterEach(() => {
     //if 'Discard changes' pop up is shown, click on discard button, else - close the dashboard
-    cy.get('.styled__StyledCloseIcon-sc-1n4rcrz-2 > .styled__StyledContainer-ci1yl8-0').click().then(($btn) => {
-      cy.get('body > div.styled__ConfirmPopup-sc-o225h-0.dGnJUI.styled__StyledPopupContainer-sc-1n4rcrz-0.cLrtod')
-        .should('exist')  // Check if the popup exists
-        .then(($popup) => {
-          if ($popup.length > 0) {
-            // Popup is shown, click the confirm button
-            cy.get('.styled__ConfirmButton-sc-o225h-7').click();
-          } else {
-            cy.get('.title')
-          }
-        });
-    });
+    // cy.get('.styled__StyledCloseIcon-sc-1n4rcrz-2 > .styled__StyledContainer-ci1yl8-0').click().then(($btn) => {
+    //   cy.get('body > div.styled__ConfirmPopup-sc-o225h-0.dGnJUI.styled__StyledPopupContainer-sc-1n4rcrz-0.cLrtod')
+    //     .should('exist')  // Check if the popup exists
+    //     .then(($popup) => {
+    //       if ($popup.length > 0) {
+    //         // Popup is shown, click the confirm button
+    //         cy.get('.styled__ConfirmButton-sc-o225h-7').click();
+    //       } else {
+    //         cy.get('.title')
+    //       }
+    //     });
+    // });
+
+    cy.get('button[aria-label="close"]').click();
+
+    cy.get('button').filter(':contains("DISCARD")').then($elements => {
+      if ($elements.length === 1) {
+        cy.get('button').filter(':contains("DISCARD")').click();
+      }
+    })
+
+
   })
 });
 

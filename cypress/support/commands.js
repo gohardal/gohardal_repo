@@ -26,9 +26,14 @@
 
 //login command
 Cypress.Commands.add('typeLoginCredentials', { prevSubject: false }, (loginName, loginPassword) => {
-    cy.get(':nth-child(1) > .InputContent--1o9vo3j').clear().type(`${loginName}`);
-    cy.get(':nth-child(2) > .InputContent--1o9vo3j').clear().type(`${loginPassword}`);
-    cy.get('.ButtonWrapper--1wo79dv').click();
+    // cy.get(':nth-child(1) > .InputContent--1o9vo3j').clear().type(`${loginName}`);
+    // cy.get(':nth-child(2) > .InputContent--1o9vo3j').clear().type(`${loginPassword}`);
+    // cy.get('.ButtonWrapper--1wo79dv').click();
+
+    cy.get('form[action="#"]').find('input[name="email"]').clear().type(`${loginName}`);
+    cy.get('input[name="password"]').clear().type(`${loginPassword}`);
+
+    cy.get('form[action="#"]').submit();
     cy.wait(5000);
 });
 
